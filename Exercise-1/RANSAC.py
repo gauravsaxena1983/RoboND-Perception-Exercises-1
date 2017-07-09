@@ -4,7 +4,7 @@ import pcl
 # Load Point Cloud file
 cloud = pcl.load_XYZRGB('tabletop.pcd')
 
-# Voxel Grid filter
+###################### Voxel Grid filter #######################################
 # Create a VoxelGrid filter object for our input point cloud
 vox = cloud.make_voxel_grid_filter()
 
@@ -21,7 +21,21 @@ cloud_filtered = vox.filter()
 filename = 'voxel_downsampled.pcd'
 pcl.save(cloud_filtered, filename)
 
-# PassThrough filter
+####################3 PassThrough filter ######################################
+# Create a PassThrough filter object.
+passthrough = cloud_filtered.make_passthrough_filter()
+
+# Assign axis and range to the passthrough filter object.
+filter_axis = 'z'
+passthrough.set_filter_field_name (filter_axis)
+axis_min = 0.6
+axis_max = 1.1
+passthrough.set_filter_limits (axis_min, axis_max)
+
+# Finally use the filter function to obtain the resultant point cloud. 
+cloud_filtered = passthrough.filter()
+filename = 'pass_through_filtered.pcd'
+pcl.save(cloud_filtered, filename)
 
 
 # RANSAC plane segmentation
